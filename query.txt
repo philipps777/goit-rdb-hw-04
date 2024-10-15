@@ -1,0 +1,195 @@
+Task 1. Створення схеми
+CREATE SCHEMA LibraryManagement;
+
+USE LibraryManagement;
+
+CREATE TABLE authors (
+    author_id INT AUTO_INCREMENT PRIMARY KEY,
+    author_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE genres (
+    genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    genre_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    publication_year YEAR NOT NULL,
+    author_id INT,
+    genre_id INT,
+    FOREIGN KEY (author_id) REFERENCES authors(author_id),
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+);
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE borrowed_books (
+    borrow_id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT,
+    user_id INT,
+    borrow_date DATE NOT NULL,
+    return_date DATE,
+    FOREIGN KEY (book_id) REFERENCES books(book_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+Task 2. Заповнення таблиць
+
+INSERT INTO authors (author_name) VALUES ('Charles Dickens');
+INSERT INTO authors (author_name) VALUES ('Agatha Christie');
+INSERT INTO authors (author_name) VALUES ('J.R.R. Tolkien');
+INSERT INTO authors (author_name) VALUES ('George R.R. Martin');
+INSERT INTO authors (author_name) VALUES ('Jane Austen');
+INSERT INTO authors (author_name) VALUES ('Harper Lee');
+
+INSERT INTO genres (genre_name) VALUES ('Mystery');
+INSERT INTO genres (genre_name) VALUES ('Fantasy');
+INSERT INTO genres (genre_name) VALUES ('Science Fiction');
+INSERT INTO genres (genre_name) VALUES ('Romance');
+INSERT INTO genres (genre_name) VALUES ('Historical Fiction');
+INSERT INTO genres (genre_name) VALUES ('Classic');
+
+
+
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES ('A Tale of Two Cities', 1859, 1, 5);
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES ('And Then There Were None', 1939, 2, 1);
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES ('The Lord of the Rings', 1954, 3, 2);
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES ('A Song of Ice and Fire', 1996, 4, 2);
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES ('Pride and Prejudice', 1813, 5, 4);
+INSERT INTO books (title, publication_year, author_id, genre_id) VALUES ('To Kill a Mockingbird', 1960, 6, 5);
+
+
+INSERT INTO users (username, email) VALUES ('charlie', 'charlie@example.com');
+INSERT INTO users (username, email) VALUES ('agatha', 'agatha@example.com');
+INSERT INTO users (username, email) VALUES ('frodo', 'frodo@example.com');
+INSERT INTO users (username, email) VALUES ('khaleesi', 'khaleesi@example.com');
+INSERT INTO users (username, email) VALUES ('elizabeth', 'elizabeth@example.com');
+INSERT INTO users (username, email) VALUES ('scout', 'scout@example.com');
+
+
+
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES (1, 1, '2023-01-15', '2023-10-15');
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES (2, 2, '2023-01-01', '2023-11-01');
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES (3, 3, '2023-01-01', '2023-12-01');
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES (4, 4, '2023-08-15', '2023-09-15');
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES (5, 5, '2023-07-01', '2023-07-31');
+INSERT INTO borrowed_books (book_id, user_id, borrow_date, return_date) VALUES (6, 6, '2023-06-15', '2023-07-15');
+
+Task 3. INNER JOIN
+
+USE mydb;
+
+SELECT *
+FROM categories ca
+INNER JOIN products p on ca.id = p.category_id
+INNER JOIN suppliers su on p.supplier_id = su.id
+INNER JOIN order_details od on od.product_id = p.id
+INNER JOIN orders o on o.id = od.order_id
+INNER JOIN customers cu on o.customer_id = cu.id
+INNER JOIN employees e on o.employee_id = e.employee_id
+INNER JOIN shippers sh on o.shipper_id = sh.id;
+
+
+
+USE mydb;
+
+select * from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+
+Task 4. Завдання
+
+1) SELECT COUNT(*)
+select * from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+518
+
+2) SELECT COUNT(*)
+from categories as category
+RIGHT join products as product on category.id = product.category_id
+LEFT join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+В моєму випадку кількість не змінюється 518
+
+3) SELECT COUNT(*)
+from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+WHERE employee.employee_id > 3 AND employee.employee_id <= 10;
+317
+
+4) SELECT category.id, category.name, COUNT(*) as rows_count, AVG(o_d.quantity) as average_quantity
+from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+GROUP BY category.id, category.name;
+
+5) SELECT  category.id, category.name, COUNT(*) as rows_count, AVG(o_d.quantity) as average_quantity
+from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+GROUP BY category.id, category.name
+HAVING average_quantity > 21;
+
+6) SELECT  category.id, category.name, COUNT(*) as rows_count, AVG(o_d.quantity) as average_quantity
+from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+GROUP BY category.id, category.name
+HAVING average_quantity > 21
+ORDER BY rows_count DESC
+
+7) SELECT  category.id, category.name, COUNT(*) as rows_count, AVG(o_d.quantity) as average_quantity
+from categories as category
+inner join products as product on category.id = product.category_id
+inner join suppliers as supplier on product.supplier_id = supplier.id
+inner join order_details as o_d on o_d.product_id = product.id
+inner join orders as ord on ord.id = o_d.order_id
+inner join customers as customer on ord.customer_id = customer.id
+inner join employees as employee on ord.employee_id = employee.employee_id
+inner join shippers as shipper on ord.shipper_id = shipper.id
+GROUP BY category.id, category.name
+HAVING average_quantity > 21
+ORDER BY rows_count DESC
+LIMIT 4 OFFSET 1;
